@@ -147,4 +147,127 @@ class View
         </html>";
     }
     }
+    public function showRecepten($result = null){
+
+        if($result == 1){
+            echo "<h4> <span class=\"badge bg-warning\">Actie geslaagd</span></h4>";
+        }
+        $recepten = $this->model->getRecepten();
+
+        /*de html template */
+        echo "<!DOCTYPE html>
+                <html lang=\"en\">
+                <head>
+                    <meta charset=\"UTF-8\">
+                    <title> <span class=\"badge bg-secondary\">Overzicht recepten </span> </title>
+                    <style>
+                        #recepten{
+                            display:grid;
+                            grid-template-columns:repeat(4,1fr);                
+                            grid-column-gap:10px;
+                            grid-row-gap:10px;
+                            justify-content: center;
+                        }
+                        .recept{
+                            width:80%;
+                            background-color:#ccccff;
+                            color:darkslategray;
+                            font-size:24px;
+                            padding:10px;
+                            border-radius:10px;
+                        }
+                    </style>
+                </head>
+                <body>";
+        echo "<h2><span class=\"badge bg-info\"><i class='fas fa-clinic-medical'></i> Recepten overzicht</span></h2> <form action='index.php' method='post'>
+                               <input type='hidden' name='showForm' value='0'>
+                               <button type='submit' class='btn btn-primary'><i class='fas fa-plus'></i> toevoegen</button>
+                               
+                               </form></div></body></html>";
+        if($recepten !== null) { echo "
+                        <div id=\"recepten\">";
+            foreach ($recepten as $recept) {
+                echo "<div class=\"patient card text-white bg-secondary mb-3\">
+                                        <div class=\"card-header\">
+                                      $recept->naam</div>
+                                      $recept->datum<br />
+                                      $recept->duur<br />
+                                      $recept->dosis<br />
+                                      <form action='index.php' method='post'>
+                                       <input type='hidden' name='showForm' value='$recept->id'>
+                                       <button type='submit' class='btn btn-primary'><i class='fas fa-user-edit'></i> wijzigen </button>
+                                       </form>
+                                        <form action='index.php' method='post'>
+                                       <input type='hidden' name='delete' value='$recept->id'>
+                                       <button type='submit' class='btn btn-primary'><i class='fas fa-user-times'></i> verwijderen</button>
+                                      
+                                       </form>
+                                    </div>";
+            }
+        }
+        else{
+            echo "Geen recepten gevonden";
+        }
+
+    }
+    public function showFormRecepten($id=null)
+    {
+        if ($id != null && $id != 0) {
+            $recept = $this->model->selectRecept($id);
+        }
+        /*de html template */
+        echo "<!DOCTYPE html>
+        <html lang=\"en\">
+        <head>
+            <meta charset=\"UTF-8\">
+            <title>Beheer receptengegevens</title>
+        </head><body>
+        <h2><span class=\"badge bg-info\"><i class='fas fa-plus'></i> Formulier receptgegevens</span></h2>";
+        if (isset($recept)) {
+            echo "<form method='post' >
+        <table>
+            <tr><td></td><td>
+                <input type=\"hidden\" name=\"id\" value='$id'/></td></tr>
+             <tr><td>   <label for=\"naam\"  class=\"form-label\">Recept naam</label></td><td>
+                <input type=\"text\" name=\"naam\"  class=\"form-control\" value= '" . $recept->naam . "'/></td></tr>
+            <tr><td>
+                <label for=\"datum\" class=\"form-label\">adres</label></td><td>
+                <input type=\"text\" name=\"datum\" class=\"form-control\" value = '" . $recept->datum . "'/></td></tr>
+            <tr><td>
+                <label for=\"duur\" class=\"form-label\">duur</label></td><td>
+                <input type=\"text\" name=\"duur\" class=\"form-control\" value= '" . $recept->woonplaats . "'/></td></tr>
+            <tr><td>
+                <label for=\"dosis\" class=\"form-label\">dosis</label></td><td>
+                <input type=\"text\" name=\"dosis\" class=\"form-control\" value= '" . $recept->dosis . "'/></td></tr>
+            <tr><td>
+                <button type='submit' name='create' value='opslaan' class='btn btn-primary'> <i class='fas fa-save'></i> opslaan</button></td><td>
+            </td></tr></table>
+            </form>
+        </body>
+        </html>";
+        } else {
+            /*de html template */
+            echo "<form method='post' action='index.php'>
+        <table>
+            <tr><td></td><td>
+                <input type=\"hidden\" name=\"id\" value=''/></td></tr>
+             <tr><td>   <label for=\"naam\" class=\"form-label\" >Recept naam</label></td><td>
+                <input type=\"text\" name=\"naam\" class=\"form-control\" value= ''/></td></tr>
+            <tr><td>
+                <label for=\"datum\" class=\"form-label\">datum</label></td><td>
+                <input type=\"text\" name=\"datum\" class=\"form-control\" value = ''/></td></tr>
+            <tr><td>
+                <label for=\"duur\" class=\"form-label\">duur</label></td><td>
+                <input type=\"text\" name=\"duur\" class=\"form-control\" value= ''/></td></tr>
+            <tr><td>
+                <label for=\"dosis\" class=\"form-label\">dosis</label></td><td>
+                <input type=\"text\" name=\"dosis\" class=\"form-control\" value= ''/></td></tr>
+            <tr><td>
+                <button type='submit' name='create' value='opslaan' class='btn btn-primary'> <i class='fas fa-save'></i> opslaan</button></td><td>
+            </td></tr></table>
+            </form>
+        </body>
+        </html>";
+        }
+    }
 }
