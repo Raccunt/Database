@@ -3,6 +3,7 @@ namespace controller;
 include_once "view/View.php";
 use view\View;
 include_once "model/Patient.php";
+include_once "model/Recept.php";
 use model\Model;
 
 class Controller
