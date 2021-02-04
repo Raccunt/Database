@@ -86,4 +86,74 @@ class Model
         return $result;
     }
 
+    public function insertRecept($naam,$datum,$duur,$dosis){
+        $this->makeConnection();
+        if($naam !='')
+        {
+            $query = $this->database->prepare (
+                "INSERT INTO `recepten` (`id`, `naam`, `datum`, `duur`, `dosis`) 
+                VALUES (NULL, :naam, :datum, :duur, :dosis)");
+            $query->bindParam(":naam", $naam);
+            $query->bindParam(":datum", $datum);
+            $query->bindParam(":duur",$duur);
+            $query->bindParam(":dosis", $dosis);
+            $result = $query->execute();
+            return $result;
+        }
+        return -1;
+        // id hoeft niet te worden toegevoegd omdat de id in de databse op autoincrement staat.
+
+
+    }
+    public function updateRecept($id,$naam,$datum,$duur,$dosis){
+        $this->makeConnection();
+
+        // id moet worden toegevoegd omdat de id in de databse wordt gezocht
+        $query = $this->database->prepare (
+            "UPDATE `recepten` SET `naam` = :naam, `datum`=:datum, `duur` = :duur, `dosis`=:dosis 
+            WHERE `recepten`.`id` = :id ");
+        $query->bindParam(":id", $id);
+        $query->bindParam(":naam", $naam);
+        $query->bindParam(":datum", $datum);
+        $query->bindParam(":duur",$duur);
+        $query->bindParam(":dosis", $dosis);
+        $result = $query->execute();
+        return $result;
+    }
+
+    public function getPatienten(){
+
+        $this->makeConnection();
+        $selection = $this->database->query('SELECT * FROM `patienten`');
+        if($selection){
+            $result=$selection->fetchAll(\PDO::FETCH_CLASS,\model\Patient::class);
+            return $result;
+        }
+        return null;
+    }
+    public function selectPatient($id){
+
+        $this->makeConnection();
+        $selection = $this->database->prepare(
+            'SELECT * FROM `patienten` 
+            WHERE `patienten`.`id` =:id');
+        $selection->bindParam(":id",$id);
+        $result = $selection ->execute();
+        if($result){
+            $selection->setFetchMode(\PDO::FETCH_CLASS, \model\Patient::class);
+            $patient = $selection->fetch();
+            return $patient;
+        }
+        return null;
+    }
+    public function deletePatient($id){
+        $this->makeConnection();
+        $selection = $this->database->prepare(
+            'DELETE FROM `patienten` 
+            WHERE `patienten`.`id` =:id');
+        $selection->bindParam(":id",$id);
+        $result = $selection ->execute();
+        return $result;
+    }
+
 }
