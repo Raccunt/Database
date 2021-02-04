@@ -30,13 +30,12 @@ else if(isset($_POST['delete']))
         $controller->deletePatientAction($_POST['delete']);
     }
 /*READ:  overzicht alle patienten */
-else
+else if(isset($_POST['read']))
     {
         $controller->readPatientenAction();
     }
 
-
-if(isset($_POST['showFormRecept']))
+else if(isset($_POST['showFormRecept']))
 {
     $controller->showFormReceptAction( $_POST['showFormRecept']);
 }
@@ -52,7 +51,7 @@ else if(isset($_POST['deleteRecept']))
 {
     $controller->deleteReceptAction($_POST['deleteRecept']);
 }
-else
+else if(isset($_POST['readRecept']))
 {
     $controller->readReceptenAction();
 }

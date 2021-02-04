@@ -9,7 +9,7 @@ class Recept
     private $datum;
     private $duur;
     private $dosis;
-    
+
     public function __get($property) {
         if (property_exists($this, $property)) {
             return $this->$property;
