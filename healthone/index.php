@@ -36,5 +36,26 @@ else
     }
 
 
+if(isset($_POST['showFormRecept']))
+{
+    $controller->showFormReceptAction( $_POST['showFormRecept']);
+}
+else if(isset($_POST['updateRecept']))
+{
+    $controller->updateReceptAction();
+}
+else if(isset($_POST['createRecept']))
+{
+    $controller->createReceptAction();
+}
+else if(isset($_POST['deleteRecept']))
+{
+    $controller->deleteReceptAction($_POST['deleteRecept']);
+}
+else
+{
+    $controller->readReceptenAction();
+}
+
 
 
